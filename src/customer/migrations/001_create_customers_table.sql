@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS customers CASCADE;
 -- Create customers table
 CREATE TABLE customers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  "firstName" VARCHAR(100) NOT NULL,
-  "lastName" VARCHAR(100) NOT NULL,
+  "firstName" VARCHAR(100),
+  "lastName" VARCHAR(100),
   email VARCHAR(255) NOT NULL UNIQUE,
   phone VARCHAR(20),
   "phoneCountryCode" VARCHAR(10),

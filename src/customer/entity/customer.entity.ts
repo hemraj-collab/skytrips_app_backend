@@ -14,16 +14,18 @@ export class CustomerEntity extends CommonAttribute {
   @ApiProperty({
     description: 'First name of the customer',
     example: 'John',
+    required: false,
   })
-  @Column({ type: 'varchar', length: 100 })
-  firstName: string;
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  firstName?: string;
 
   @ApiProperty({
     description: 'Last name of the customer',
     example: 'Doe',
+    required: false,
   })
-  @Column({ type: 'varchar', length: 100 })
-  lastName: string;
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  lastName?: string;
 
   @ApiProperty({
     description: 'Email address of the customer',
@@ -67,16 +69,18 @@ export class CustomerEntity extends CommonAttribute {
   @ApiProperty({
     description: 'User type',
     example: 'USER',
+    required: false,
   })
-  @Column({ type: 'varchar', length: 50, default: 'USER' })
-  userType: string;
+  @Column({ type: 'varchar', length: 50, default: 'USER', nullable: true })
+  userType?: string;
 
   @ApiProperty({
     description: 'Is active',
     example: true,
+    required: false,
   })
-  @Column({ type: 'boolean', default: true })
-  isActive: boolean;
+  @Column({ type: 'boolean', default: true, nullable: true })
+  isActive?: boolean;
 
   @ApiProperty({
     description: 'Country',
@@ -109,16 +113,18 @@ export class CustomerEntity extends CommonAttribute {
   @ApiProperty({
     description: 'Is disabled',
     example: false,
+    required: false,
   })
-  @Column({ type: 'boolean', default: false })
-  isDisabled: boolean;
+  @Column({ type: 'boolean', default: false, nullable: true })
+  isDisabled?: boolean;
 
   @ApiProperty({
     description: 'Is verified',
     example: false,
+    required: false,
   })
-  @Column({ type: 'boolean', default: false })
-  isVerified: boolean;
+  @Column({ type: 'boolean', default: false, nullable: true })
+  isVerified?: boolean;
 
   @ApiProperty({
     description: 'Passport information',

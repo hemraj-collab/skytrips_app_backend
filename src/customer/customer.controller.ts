@@ -60,21 +60,23 @@ export class CustomerController {
   @Post()
   async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
     try {
-      // Check if table exists, create if not
-      const tableExists =
-        await this.tableMigrationService.checkTableExists('customers');
+      // Only check/create table in development mode
+      if (process.env.NODE_ENV !== 'production') {
+        const tableExists =
+          await this.tableMigrationService.checkTableExists('customers');
 
-      if (!tableExists) {
-        // Read and execute migration SQL
-        const migrationPath = path.join(
-          process.cwd(),
-          'src',
-          'customer',
-          'migrations',
-          '001_create_customers_table.sql',
-        );
-        const sqlContent = fs.readFileSync(migrationPath, 'utf-8');
-        await this.tableMigrationService.executeSql(sqlContent);
+        if (!tableExists) {
+          // Read and execute migration SQL
+          const migrationPath = path.join(
+            process.cwd(),
+            'src',
+            'customer',
+            'migrations',
+            '001_create_customers_table.sql',
+          );
+          const sqlContent = fs.readFileSync(migrationPath, 'utf-8');
+          await this.tableMigrationService.executeSql(sqlContent);
+        }
       }
 
       // Create customer

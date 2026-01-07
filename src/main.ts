@@ -9,7 +9,8 @@ import { join } from 'path';
 import basicAuth from 'express-basic-auth';
 
 async function bootstrap() {
-  const port = process.env.APP_PORT || 8080;
+  // Render provides PORT, fallback to APP_PORT or 8080
+  const port = process.env.PORT || process.env.APP_PORT || 8080;
 
   const app = await NestFactory.create(AppModule);
 

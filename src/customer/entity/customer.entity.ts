@@ -73,10 +73,10 @@ export class CustomerEntity extends CommonAttribute {
 
   @ApiProperty({
     description: 'Is active',
-    example: 'true',
+    example: true,
   })
-  @Column({ type: 'varchar', length: 10, default: 'true' })
-  isActive: string;
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
 
   @ApiProperty({
     description: 'Country',
@@ -88,49 +88,53 @@ export class CustomerEntity extends CommonAttribute {
 
   @ApiProperty({
     description: 'Address',
-    example: { street: '123 Main St', city: 'New York' },
+    example: {
+      street: '123 Main St',
+      city: 'New York',
+      state: 'NY',
+      country: 'USA',
+      postalCode: '10001',
+    },
     required: false,
   })
   @Column({ type: 'jsonb', nullable: true })
-  address?: object;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postalCode?: string;
+  };
 
   @ApiProperty({
     description: 'Is disabled',
-    example: 'false',
+    example: false,
   })
-  @Column({ type: 'varchar', length: 10, default: 'false' })
-  isDisabled: string;
+  @Column({ type: 'boolean', default: false })
+  isDisabled: boolean;
 
   @ApiProperty({
     description: 'Is verified',
-    example: 'false',
+    example: false,
   })
-  @Column({ type: 'varchar', length: 10, default: 'false' })
-  isVerified: string;
+  @Column({ type: 'boolean', default: false })
+  isVerified: boolean;
 
   @ApiProperty({
-    description: 'Passport number',
-    example: 'A12345678',
+    description: 'Passport information',
+    example: {
+      passportNumber: 'RA2956787',
+      passportExpiryDate: '2033-06-07',
+      passportIssueCountry: 'Australia',
+    },
     required: false,
   })
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  passportNumber?: string;
-
-  @ApiProperty({
-    description: 'Passport expiry date',
-    example: '2030-12-31',
-    required: false,
-  })
-  @Column({ type: 'date', nullable: true })
-  passportExpiryDate?: Date;
-
-  @ApiProperty({
-    description: 'Passport issue country',
-    example: 'USA',
-    required: false,
-  })
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  passportIssueCountry?: string;
+  @Column({ type: 'jsonb', nullable: true })
+  passport?: {
+    passportNumber?: string;
+    passportExpiryDate?: string;
+    passportIssueCountry?: string;
+  };
 
   @ApiProperty({
     description: 'Social provider',

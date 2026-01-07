@@ -7,6 +7,7 @@ import {
   IsString,
   IsObject,
   IsDate,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateCustomerDto {
@@ -80,41 +81,72 @@ export class CreateCustomerDto {
   country?: string;
 
   @ApiProperty({
+    description: 'User type',
+    example: 'USER',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  userType?: string;
+
+  @ApiProperty({
+    description: 'Is active',
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @ApiProperty({
+    description: 'Is disabled',
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isDisabled?: boolean;
+
+  @ApiProperty({
+    description: 'Is verified',
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isVerified?: boolean;
+
+  @ApiProperty({
     description: 'Address',
-    example: { street: '123 Main St', city: 'New York' },
+    example: { street: '123 Main St', city: 'New York', state: 'NY', country: 'USA', postalCode: '10001' },
     required: false,
   })
   @IsOptional()
   @IsObject()
-  address?: object;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postalCode?: string;
+  };
 
   @ApiProperty({
-    description: 'Passport number',
-    example: 'A12345678',
+    description: 'Passport information',
+    example: {
+      passportNumber: 'RA2956787',
+      passportExpiryDate: '2033-06-07',
+      passportIssueCountry: 'Australia',
+    },
     required: false,
   })
   @IsOptional()
-  @IsString()
-  passportNumber?: string;
-
-  @ApiProperty({
-    description: 'Passport expiry date',
-    example: '2030-12-31',
-    required: false,
-  })
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  passportExpiryDate?: Date;
-
-  @ApiProperty({
-    description: 'Passport issue country',
-    example: 'USA',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  passportIssueCountry?: string;
+  @IsObject()
+  passport?: {
+    passportNumber?: string;
+    passportExpiryDate?: string;
+    passportIssueCountry?: string;
+  };
 
   @ApiProperty({
     description: 'Social provider',

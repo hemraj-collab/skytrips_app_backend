@@ -118,7 +118,13 @@ export class CreateCustomerDto {
 
   @ApiProperty({
     description: 'Address',
-    example: { street: '123 Main St', city: 'New York', state: 'NY', country: 'USA', postalCode: '10001' },
+    example: {
+      street: '123 Main St',
+      city: 'New York',
+      state: 'NY',
+      country: 'USA',
+      postalCode: '10001',
+    },
     required: false,
   })
   @IsOptional()

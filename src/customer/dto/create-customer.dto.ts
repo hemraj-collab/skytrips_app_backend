@@ -14,18 +14,20 @@ export class CreateCustomerDto {
   @ApiProperty({
     description: 'First name of the customer',
     example: 'John',
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  firstName: string;
+  firstName?: string;
 
   @ApiProperty({
     description: 'Last name of the customer',
     example: 'Doe',
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  lastName: string;
+  lastName?: string;
 
   @ApiProperty({
     description: 'Email address of the customer',

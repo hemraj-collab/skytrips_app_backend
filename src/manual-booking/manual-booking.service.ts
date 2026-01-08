@@ -2,12 +2,74 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SupabaseService } from '@app/database';
 import { PaginationInput } from 'src/common/pagination';
 import { ManualBookingEntity } from './entity/manual-booking.entity';
+import { DynamicSchemaService } from 'src/common/table-service/dynamic-schema.service';
 
 @Injectable()
 export class ManualBookingService {
   private readonly tableName = 'manual_bookings';
+  private schemaInitialized = false;
 
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+    private readonly supabaseService: SupabaseService,
+    private readonly dynamicSchemaService: DynamicSchemaService,
+  ) {}
+
+  /**
+   * Ensure all required columns exist in the table
+   */
+  private async ensureSchema(): Promise<void> {
+    if (this.schemaInitialized) {
+      return;
+    }
+
+    const columns = [
+      { name: 'id', type: 'UUID' },
+      { name: 'customerId', type: 'UUID' },
+      { name: 'isExistingCustomer', type: 'BOOLEAN', default: false },
+      { name: 'isExistingTraveller', type: 'BOOLEAN', default: false },
+      { name: 'traveller', type: 'JSONB' },
+      { name: 'tripType', type: 'VARCHAR(50)' },
+      { name: 'travelDate', type: 'DATE' },
+      { name: 'origin', type: 'VARCHAR(100)' },
+      { name: 'destination', type: 'VARCHAR(100)' },
+      { name: 'stopoverLocation', type: 'VARCHAR(100)' },
+      { name: 'stopoverArrivalDate', type: 'DATE' },
+      { name: 'stopoverDepartureDate', type: 'DATE' },
+      { name: 'airline', type: 'VARCHAR(255)' },
+      { name: 'flightNumber', type: 'VARCHAR(50)' },
+      { name: 'class', type: 'VARCHAR(50)' },
+      { name: 'bookingId', type: 'VARCHAR(100)' },
+      { name: 'pnr', type: 'VARCHAR(50)' },
+      { name: 'issuedThroughAgency', type: 'VARCHAR(255)' },
+      { name: 'handledBy', type: 'VARCHAR(255)' },
+      { name: 'bookingStatus', type: 'VARCHAR(50)', default: 'PENDING' },
+      { name: 'costPrice', type: 'DECIMAL(10, 2)' },
+      { name: 'sellingPrice', type: 'DECIMAL(10, 2)' },
+      { name: 'paymentStatus', type: 'VARCHAR(50)', default: 'pending' },
+      { name: 'currencyCode', type: 'VARCHAR(10)' },
+      { name: 'paymentMethod', type: 'VARCHAR(50)' },
+      { name: 'transactionId', type: 'VARCHAR(255)' },
+      { name: 'dateOfPayment', type: 'DATE' },
+      { name: 'notes', type: 'TEXT' },
+      { name: 'createdAt', type: 'TIMESTAMPTZ' },
+      { name: 'updatedAt', type: 'TIMESTAMPTZ' },
+    ];
+
+    const result = await this.dynamicSchemaService.ensureColumnsExist(
+      this.tableName,
+      columns,
+    );
+
+    if (result.success) {
+      this.schemaInitialized = true;
+      if (result.addedColumns.length > 0) {
+        console.log(
+          `Added missing columns to ${this.tableName}:`,
+          result.addedColumns,
+        );
+      }
+    }
+  }
 
   async getManualBookings(
     whereParams?: Partial<ManualBookingEntity>,
@@ -76,6 +138,9 @@ export class ManualBookingService {
 
   async createManualBooking(bookingInput: Partial<ManualBookingEntity>) {
     try {
+      // Ensure schema is up to date before creating
+      await this.ensureSchema();
+
       const supabase = this.supabaseService.getClient();
       const { data, error } = await supabase
         .from(this.tableName)

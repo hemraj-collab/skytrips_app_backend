@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AdminModule } from '../../../src/admin/admin.module';
 import { CustomerModule } from '../../../src/customer/customer.module';
 import { ManualBookingModule } from '../../../src/manual-booking/manual-booking.module';
+import { CurrencyConverterModule } from '../../../src/currency-converter/currency-converter.module';
 
 export class SwaggerService {
   static setup(app: INestApplication): void {
@@ -28,7 +29,7 @@ export class SwaggerService {
       .build();
 
     const document = SwaggerModule.createDocument(app, config, {
-      include: [CustomerModule, ManualBookingModule],
+      include: [CustomerModule, ManualBookingModule, CurrencyConverterModule],
     });
 
     SwaggerModule.setup('docs', app, document);

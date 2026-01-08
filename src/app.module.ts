@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { ManualBookingModule } from './manual-booking/manual-booking.module';
 import { CustomerModule } from './customer/customer.module';
 import { AdminModule } from './admin/admin.module';
+import { CurrencyConverterModule } from './currency-converter/currency-converter.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
     ManualBookingModule,
     CustomerModule,
     AdminModule,
+    CurrencyConverterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

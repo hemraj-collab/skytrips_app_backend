@@ -2,11 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { BookingStatus } from '../enum';
+import { BookingStatus, PaymentStatus, PaymentMethod } from '../enum';
 
 export class CreateManualBookingInput {
   @ApiProperty({
@@ -187,11 +188,85 @@ export class CreateManualBookingInput {
 
   @ApiProperty({
     description: 'Booking status',
-    example: 'confirmed',
+    example: BookingStatus.PENDING,
     enum: BookingStatus,
     required: false,
   })
   @IsOptional()
   @IsEnum(BookingStatus)
   bookingStatus?: BookingStatus;
+
+  @ApiProperty({
+    description: 'Cost price of the booking',
+    example: 500.0,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  costPrice?: number;
+
+  @ApiProperty({
+    description: 'Selling price of the booking',
+    example: 650.0,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  sellingPrice?: number;
+
+  @ApiProperty({
+    description: 'Payment status',
+    example: 'PAID',
+    enum: PaymentStatus,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(PaymentStatus)
+  paymentStatus?: PaymentStatus;
+
+  @ApiProperty({
+    description: 'Currency used for the booking',
+    example: 'USD',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  currencyCode?: string;
+
+  @ApiProperty({
+    description: 'Payment method',
+    example: 'CREDIT_CARD',
+    enum: PaymentMethod,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(PaymentMethod)
+  paymentMethod?: PaymentMethod;
+
+  @ApiProperty({
+    description: 'Transaction ID from payment gateway',
+    example: 'txn_1234567890',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  transactionId?: string;
+
+  @ApiProperty({
+    description: 'Date of payment',
+    example: '2026-01-08',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  dateOfPayment?: string;
+
+  @ApiProperty({
+    description: 'Additional notes or comments about the booking',
+    example: 'Special meal requested',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  notes?: string;
 }

@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { CustomerEntity } from 'src/customer/entity/customer.entity';
-import { BookingStatus } from '../enum';
+import { BookingStatus, PaymentStatus, PaymentMethod } from '../enum';
 
 @Entity('manual_bookings')
 export class ManualBookingEntity extends CommonAttribute {
@@ -194,4 +194,75 @@ export class ManualBookingEntity extends CommonAttribute {
     nullable: true,
   })
   bookingStatus?: BookingStatus;
+
+  @ApiProperty({
+    description: 'Cost price of the booking',
+    example: 500.0,
+    required: false,
+  })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  costPrice?: number;
+
+  @ApiProperty({
+    description: 'Selling price of the booking',
+    example: 650.0,
+    required: false,
+  })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  sellingPrice?: number;
+
+  @ApiProperty({
+    description: 'Payment status',
+    example: 'PAID',
+    enum: PaymentStatus,
+    required: false,
+  })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    default: PaymentStatus.PENDING,
+    nullable: true,
+  })
+  paymentStatus?: PaymentStatus;
+
+  @ApiProperty({
+    description: 'Currency used for the booking',
+    example: 'USD',
+    required: false,
+  })
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  currencyCode?: string;
+
+  @ApiProperty({
+    description: 'Payment method',
+    example: 'CREDIT_CARD',
+    enum: PaymentMethod,
+    required: false,
+  })
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  paymentMethod?: PaymentMethod;
+
+  @ApiProperty({
+    description: 'Transaction ID from payment gateway',
+    example: 'txn_1234567890',
+    required: false,
+  })
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  transactionId?: string;
+
+  @ApiProperty({
+    description: 'Date of payment',
+    example: '2026-01-08',
+    required: false,
+  })
+  @Column({ type: 'date', nullable: true })
+  dateOfPayment?: Date;
+
+  @ApiProperty({
+    description: 'Additional notes or comments about the booking',
+    example: 'Special meal requested',
+    required: false,
+  })
+  @Column({ type: 'text', nullable: true })
+  notes?: string;
 }
